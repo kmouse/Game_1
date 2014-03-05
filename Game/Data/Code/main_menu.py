@@ -30,8 +30,9 @@ def run_menu():
     quit_button = Button(screen, "Quit", "import sys; sys.exit()", "width/2", "((height - 220) / 8) * 5 + 220")
     
     # Create the title
-    Image(screen, "width/2", "120", image="game_title.png")
+    Image(screen, "width/2", "120", image="Static_Images\\game_title.png")
     
+    # This is used to cap the framerate
     clock = pygame.time.Clock()
     
     mouse = Mouse()
@@ -61,7 +62,7 @@ def run_menu():
         pygame.display.update()
         clock.tick(60)
     
-    pygame.quit()
+    ##pygame.quit()
         
 def options():
     pass

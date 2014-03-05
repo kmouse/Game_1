@@ -6,7 +6,7 @@ pygame.init()
 
 # This is the base class for any button object
 class Button(pygame.sprite.Sprite):
-    def __init__(self, screen, text, command, x, y, width=64, height=20, image="button.png", highlight_image="button_highlighted.png", pressed_image="button_pressed.png", init_command="", text_size=24, text_align="center", type="Button"):
+    def __init__(self, screen, text, command, x, y, width=64, height=20, image="Buttons\\button.png", highlight_image="Buttons\\button_highlighted.png", pressed_image="Buttons\\button_pressed.png", init_command="", text_size=24, text_align="center", type="Button", press_method="click"):
         # Initialise the sprite module
         pygame.sprite.Sprite.__init__(self, self.containers)
         # Make the image
@@ -48,6 +48,8 @@ class Button(pygame.sprite.Sprite):
         # This is the command run when the button is pressed
         self.command = command
         
+        self.press_method = press_method
+        
         # Run the init_command
         exec(init_command)
         
@@ -59,18 +61,23 @@ class Button(pygame.sprite.Sprite):
         pressed = False
         mouse_rect = pygame.Rect(mouse_pos, (1, 1))
         # If the mouse is on the button
+        # When self.pressed == 1 then the mouse is down and started over the button
+        # When self.pressed == 0 then the mouse is not down
+        # When self.pressed == 2 then the mouse is down but did not start over the button or button is already used
+        
         if self.rect.colliderect(mouse_rect):
             if mouse_down[0] and self.pressed == 0:
                 self.pressed = 1
                 self.image = self.pressed_image
             elif mouse_down[0] and self.pressed == 1:
                 self.pressed = 1
+                if self.press_method == "mouse down": exec(self.command); self.pressed = 2; pressed = True
                 self.image = self.pressed_image
             elif mouse_down[0] and self.pressed == 2:
                 self.pressed = 2
             else:
                 if self.pressed == 1:
-                    exec(self.command)
+                    if self.press_method == "click": exec(self.command)
                     pressed = True
                 self.pressed = 0
                 self.image = self.highlight_image

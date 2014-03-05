@@ -9,12 +9,12 @@ class Player(pygame.sprite.Sprite):
         # Initialise the sprite module
         pygame.sprite.Sprite.__init__(self, self.containers)
         # Make the image
-        self.image = pygame.image.load(get_image("planet.png"))
+        self.image = pygame.image.load(get_image("Gameplay_Objects\\planet.png"))
         
         self.rect = self.image.get_rect()
         self.rect.center = x, y
         
-        self.mass = 20
+        self.mass = 1
         self.x, self.y = x, y
         self.velocity = velocity
         self.angle = angle
@@ -24,6 +24,8 @@ class Player(pygame.sprite.Sprite):
         self.lastpos = (self.x + (math.sin(self.angle + 3.14159265359)*self.velocity), self.y - (math.cos(self.angle + 3.14159265359)*self.velocity))
 
         self.killed = False;
+        
+        self.finish = False
         
     def update(self, effectors):
         #get the velocity and angle
@@ -38,7 +40,7 @@ class Player(pygame.sprite.Sprite):
 
         #apply the gravity from each of the points
         for point in effectors:
-            if point.type == "Black Hole":
+            if str(type(point)) == "<class 'effectors.Black_Hole'>":
                 if get_distance((self.x, self.y), (point.x, point.y)) < point.mass:
                     self.kill()
                     self.killed = True
@@ -58,7 +60,7 @@ class Player(pygame.sprite.Sprite):
                 ##pygame.draw.line(screen, (color, color, 10), (self.x, self.y), (point.x, point.y), 1)
                         
             #apply the force from each of the  thrusters
-            elif point.type == "Thruster":
+            elif str(type(point)) == "<class 'effectors.Thruster'>":
                 #get the needed values
                 direction = thruster.angle
                 strength = thruster.velocity
@@ -66,5 +68,13 @@ class Player(pygame.sprite.Sprite):
                 old = self.lastpos
                 self.x += (math.sin(direction) * strength / self.mass)
                 self.y -= (math.cos(direction) * strength / self.mass)
+                
+            elif str(type(point)) == "<class 'effectors.Finish'>":
+                if point.rect.contains(self.rect):
+                    self.finish = True
+                else:
+                    self.finish = False
+                
+                
                 
         self.rect.center = self.x, self.y

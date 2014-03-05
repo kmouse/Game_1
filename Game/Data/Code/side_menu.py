@@ -50,36 +50,28 @@ class side_menu(pygame.sprite.Sprite):
             item = item.split(":")
             print(item)
             if item[0] == "Black Hole":
-                self.buttons.append(Button(self.image, item[1] + " x", REDUCE_NUMBER_CODE, "width/2", str(pos_y), init_command="self.value=" + item[1], type="Create Black Hole",
-                image="black_hole_button.png", highlight_image="black_hole_button_highlighted.png", pressed_image="black_hole_button_pressed.png", text_align="left"))
+                self.buttons.append(Button(self.image, item[1] + " x", REDUCE_NUMBER_CODE, "width/2", str(pos_y), init_command="self.value=" + item[1], type="Create Black Hole",    image="Buttons\\Gameplay_Buttons\\black_hole_button.png", highlight_image="Buttons\\Gameplay_Buttons\\black_hole_button_highlighted.png", pressed_image="Buttons\\Gameplay_Buttons\\black_hole_button_pressed.png", text_align="left", press_method="mouse down"))
             elif item[0] == "Trigger Left":
-                self.buttons.append(Button(self.image, item[1] + " x", REDUCE_NUMBER_CODE, "width/2", str(pos_y), init_command="self.value=" + item[1], type="Create Trigger Left",
-                image="trigger_left_button.png", highlight_image="trigger_left_button_highlighted.png", pressed_image="trigger_left_button_pressed.png", text_align="left"))
+                self.buttons.append(Button(self.image, item[1] + " x", REDUCE_NUMBER_CODE, "width/2", str(pos_y), init_command="self.value=" + item[1], type="Create Trigger Left",image="Buttons\\Gameplay_Buttons\\trigger_left_button.png", highlight_image="Buttons\\Gameplay_Buttons\\trigger_left_button_highlighted.png", pressed_image="Buttons\\Gameplay_Buttons\\trigger_left_button_pressed.png", text_align="left", press_method="mouse down"))
             elif item[0] == "Trigger Right":
-                self.buttons.append(Button(self.image, item[1] + " x", REDUCE_NUMBER_CODE, "width/2", str(pos_y), init_command="self.value=" + item[1], type="Create Trigger Right",
-                image="trigger_right_button.png", highlight_image="trigger_right_button_highlighted.png", pressed_image="trigger_right_button_pressed.png", text_align="left"))
+                self.buttons.append(Button(self.image, item[1] + " x", REDUCE_NUMBER_CODE, "width/2", str(pos_y), init_command="self.value=" + item[1], type="Create Trigger Right",image="Buttons\\Gameplay_Buttons\\trigger_right_button.png", highlight_image="Buttons\\Gameplay_Buttons\\trigger_right_button_highlighted.png", pressed_image="Buttons\\Gameplay_Buttons\\trigger_right_button_pressed.png", text_align="left", press_method="mouse down"))
         
             pos_y += increment
         
         
         # Create the default menu buttons
-        self.buttons.append(Button(self.image, "Menu", "print('Menu')", "50", "height-30", 
-        image="button-white-small.png", highlight_image="button_highlighted-white-small.png", pressed_image="button_pressed-white-small.png", text_size=20))
+        self.buttons.append(Button(self.image, "Menu", "print('Menu')", "50", "height-30", image="Buttons\\small_button-white.png", highlight_image="Buttons\\small_button_highlighted-white.png", pressed_image="Buttons\\small_button_pressed-white.png", text_size=20))
         
-        self.buttons.append(Button(self.image, "Options", "print('Options')", "width-50", "height-30", 
-        image="button-white-small.png", highlight_image="button_highlighted-white-small.png", pressed_image="button_pressed-white-small.png", text_size=20))
+        self.buttons.append(Button(self.image, "Options", "print('Options')", "width-50", "height-30", image="Buttons\\small_button-white.png", highlight_image="Buttons\\small_button_highlighted-white.png", pressed_image="Buttons\\small_button_pressed-white.png", text_size=20))
         
-        self.buttons.append(Button(self.image, "", "print('Undo')", "40", "height-100", 
-        image="button-white-undo.png", highlight_image="button_highlighted-white-undo.png", pressed_image="button_pressed-white-undo.png", text_size=20))
+        # Game control buttons
+        self.buttons.append(Button(self.image, "Play", "print('Play')", "50", "height-100", image="Buttons\\small_button-white.png", highlight_image="Buttons\\small_button_highlighted-white.png", pressed_image="Buttons\\small_button_pressed-white.png", text_size=20, init_command="self.value=1", type="play game"))
         
-        self.buttons.append(Button(self.image, "", "print('Redo')", "width/2", "height-100", 
-        image="button-white-redo.png", highlight_image="button_highlighted-white-redo.png", pressed_image="button_pressed-white-redo.png", text_size=20))
+        self.buttons.append(Button(self.image, "Restart", "print('Restart')", "width-50", "height-100", image="Buttons\\small_button-white.png", highlight_image="Buttons\\small_button_highlighted-white.png", pressed_image="Buttons\\small_button_pressed-white.png", text_size=20, init_command="self.value=1", type="restart game"))
         
-        self.buttons.append(Button(self.image, "", "print('Restart')", "width-40", "height-100", 
-        image="button-white-restart.png", highlight_image="button_highlighted-white-restart.png", pressed_image="button_pressed-white-restart.png", text_size=20))
         
         # Create the menu break for asthetic reasons
-        Image(self.image, "width/2", "height-65", image="break.png")
+        Image(self.image, "width/2", "height-65", image="Static_Images\\break.png")
         
     def update_pos(self, screen):
          # Remake the image
@@ -97,6 +89,7 @@ class side_menu(pygame.sprite.Sprite):
         x, y = pygame.mouse.get_pos()
         for item in self.static_items:
             pressed = item.update((x - (screen.get_width() - 200), y), pygame.mouse.get_pressed(), self.image)
-            if pressed and item.value >= 0:
+            if pressed and hasattr(item, "value") and item.value >= 0:
+                print("aaa")
                 self.commands.append(item.type)
         self.static_items.draw(self.image)
