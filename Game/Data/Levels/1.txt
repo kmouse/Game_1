@@ -1,7 +1,12 @@
-Trigger Right:2
-Black Hole:4
-Trigger Left:9
+Screen:1000,1000
+Text:Press play to start the level
 --
-Player:320,240,4,1
-Player:640,0,4,2
-Black Hole:100,100
+Black Hole:1
+Trigger Left:5
+--
+# x, y, angle, speed
+Player:100,400,1,2
+# x, y
+Black Hole:300,500
+# x, y, width, height
+Finish:650,300,200,400
