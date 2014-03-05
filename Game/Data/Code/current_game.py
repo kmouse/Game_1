@@ -49,6 +49,9 @@ class Game:
             elif item[0] == "Black Hole":
                 x, y = item[1].split(",")
                 self.effectors_class.append(Black_Hole(int(x), int(y)))
+            elif item[0] == "Trigger_Left":
+                x, y, width, height = item[1].split(",")
+                self.effectors_class.append(Trigger_Left(int(x), int(y), int(width), int(height)))
             elif item[0] == "Finish":
                 x, y, width, height = item[1].split(",")
                 self.effectors_class.append(Finish(int(x), int(y), int(width), int(height)))
@@ -75,7 +78,7 @@ class Game:
                 self.effectors_class.append(Black_Hole(self.draw_area.width / 2, self.draw_area.height / 2))
             elif command == "Create Trigger Left":
                 print("True")
-                self.effectors_class.append(Trigger_Left(self.draw_area.width / 2, self.draw_area.height / 2, 300, 300))
+                self.effectors_class.append(Trigger_Left(self.draw_area.width / 2, self.draw_area.height / 2, 150, 150))
                 
         # Simulate game if true
         if self.simulate_game:

@@ -60,14 +60,15 @@ class Player(pygame.sprite.Sprite):
                 ##pygame.draw.line(screen, (color, color, 10), (self.x, self.y), (point.x, point.y), 1)
                         
             #apply the force from each of the  thrusters
-            elif str(type(point)) == "<class 'effectors.Thruster'>":
-                #get the needed values
-                direction = thruster.angle
-                strength = thruster.velocity
-                #apply the force
-                old = self.lastpos
-                self.x += (math.sin(direction) * strength / self.mass)
-                self.y -= (math.cos(direction) * strength / self.mass)
+            elif str(type(point)) == "<class 'effectors.Trigger_Left'>":
+                if point.rect.contains(self.rect):
+                    #get the needed values
+                    direction = 3.141592 * 1.5
+                    strength = 0.1
+                    #apply the force
+                    old = self.lastpos
+                    self.x += (math.sin(direction) * strength / self.mass)
+                    self.y -= (math.cos(direction) * strength / self.mass)
                 
             elif str(type(point)) == "<class 'effectors.Finish'>":
                 if point.rect.contains(self.rect):
