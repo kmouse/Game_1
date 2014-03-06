@@ -52,6 +52,9 @@ class Game:
             elif item[0] == "Trigger_Left":
                 x, y, width, height = item[1].split(",")
                 self.effectors_class.append(Trigger_Left(int(x), int(y), int(width), int(height)))
+            elif item[0] == "Trigger_Right":
+                x, y, width, height = item[1].split(",")
+                self.effectors_class.append(Trigger_Right(int(x), int(y), int(width), int(height)))
             elif item[0] == "Finish":
                 x, y, width, height = item[1].split(",")
                 self.effectors_class.append(Finish(int(x), int(y), int(width), int(height)))
@@ -74,10 +77,10 @@ class Game:
             if command == "play game":
                 self.simulate_game = True
             elif command == "Create Black Hole":
-                print("True")
                 self.effectors_class.append(Black_Hole(self.draw_area.width / 2, self.draw_area.height / 2))
             elif command == "Create Trigger Left":
-                print("True")
+                self.effectors_class.append(Trigger_Left(self.draw_area.width / 2, self.draw_area.height / 2, 150, 150))
+            elif command == "Create Trigger Right":
                 self.effectors_class.append(Trigger_Left(self.draw_area.width / 2, self.draw_area.height / 2, 150, 150))
                 
         # Simulate game if true
