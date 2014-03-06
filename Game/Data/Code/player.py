@@ -70,7 +70,7 @@ class Player(pygame.sprite.Sprite):
                     self.x += (math.sin(direction) * strength / self.mass)
                     self.y -= (math.cos(direction) * strength / self.mass)
                     
-            elif str(type(point)) == "<class 'effectors.Trigger_Left'>":
+            elif str(type(point)) == "<class 'effectors.Trigger_Right'>":
                 if point.rect.contains(self.rect):
                     #get the needed values
                     direction = 3.141592 * 0.5

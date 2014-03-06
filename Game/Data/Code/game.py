@@ -1,19 +1,13 @@
 from side_menu import side_menu
 from mouse import Mouse
 from current_game import Game
-from load import get_level, get_file, get_music, list_music
+from load import get_level, get_file, get_music
 from level_select import Level_Select
+from music import Music
+from math import ceil
 import pygame
 import sys
-from math import ceil
 import random
-
-def play_music(songs, level, total_levels):
-    if not pygame.mixer.music.get_busy():
-        song = random.choice(songs)
-        pygame.mixer.music.load(get_music(str(ceil(level/total_levels)) + "\\" + song))
-        print(song)
-        pygame.mixer.music.play()
         
         
 def control_game():
@@ -103,8 +97,9 @@ def run_game(screen, level):
     play_area = Game(screen, (int(game_size[0]), int(game_size[1])), game_items.split("\n"))
     
     # Create music and additional music data
-    songs = list_music("1")
-    play_music(songs, level, 17)
+    print(ceil((level * 8)/17))
+    music = Music(str(ceil((level * 8)/17)))
+    music.play_music()
     
     # Create the clock
     # This is used to limit the frame-rate
@@ -148,7 +143,9 @@ def run_game(screen, level):
         pygame.display.update()
         # Cap framerate
         clock.tick(60)
-        play_music(songs, level, 17)
+        
+        
+        music.play_music()
             
         if play_area.finish == True:
             with open(get_file("Levels/levels_info.txt")) as f:

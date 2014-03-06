@@ -1,6 +1,6 @@
 import pygame
 from player import Player
-from effectors import Black_Hole, Finish, Trigger_Left
+from effectors import Black_Hole, Finish, Trigger_Left, Trigger_Right
 
 ## # Music control buttons
 ## self.buttons.append(Button(self.image, "", "print('Back')", "40", "40", image="Buttons\\skip_backwards_button.png", highlight_image="Buttons\\skip_backwards_button_highlighted.png", pressed_image="Buttons\\skip_backwards_button_pressed.png", text_size=20))
@@ -37,6 +37,7 @@ class Game:
         self.effectors = pygame.sprite.Group()
         Black_Hole.containers = self.effectors
         Trigger_Left.containers = self.effectors
+        Trigger_Right.containers = self.effectors
         Finish.containers = self.effectors
         
         self.effectors_class = []

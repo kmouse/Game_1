@@ -1,6 +1,7 @@
 from button import Button
 from image import Image
 from mouse import Mouse
+from music import Music
 import pygame
 import sys
 
@@ -12,6 +13,10 @@ WHITE = (225, 225, 225)
 def run_menu():
     # Initialise pygame modules
     pygame.init()
+    
+    music = Music("Menu")
+    music.stop_music()
+    music.play_music()
     
     # Create screen with size (640, 480) and allow resizing
     screen = pygame.display.set_mode((640, 480), pygame.RESIZABLE)
@@ -61,8 +66,11 @@ def run_menu():
         if pygame.mouse.get_focused(): screen.blit(mouse.image, pygame.mouse.get_pos())
         pygame.display.update()
         clock.tick(60)
+        
+        music.play_music()
     
     ##pygame.quit()
+    music.stop_music()
         
 def options():
     pass
