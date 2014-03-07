@@ -148,12 +148,13 @@ def run_game(screen, level):
         music.play_music()
             
         if play_area.finish == True:
-            with open(get_file("Levels/levels_info.txt")) as f:
-                num_levels = f.readline()
-                unlocked_levels = int(f.readline())
-                
-            with open(get_file("Levels/levels_info.txt"), "w") as f:
-                max_level = max(unlocked_levels, level + 1)
-                f.write(num_levels + str(max_level))
+            if play_area.loose == False:
+                with open(get_file("Levels/levels_info.txt")) as f:
+                    num_levels = f.readline()
+                    unlocked_levels = int(f.readline())
+                    
+                with open(get_file("Levels/levels_info.txt"), "w") as f:
+                    max_level = max(unlocked_levels, level + 1)
+                    f.write(num_levels + str(max_level))
                 
             return False

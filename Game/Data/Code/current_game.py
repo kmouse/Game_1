@@ -62,6 +62,7 @@ class Game:
                 
                 
         self.simulate_game = False
+        self.loose = False
                 
         
     def update_size(self, screen):
@@ -91,6 +92,10 @@ class Game:
         for item in self.player:
             if item.finish == False:
                 self.finish = False
+            if item.killed == True:
+                print("deaded")
+                self.loose = True
+                self.finish = True
         self.player.draw(self.image)
         self.effectors.draw(self.image)
         # Get the new mouse events

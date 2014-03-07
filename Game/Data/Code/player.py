@@ -42,7 +42,6 @@ class Player(pygame.sprite.Sprite):
         for point in effectors:
             if str(type(point)) == "<class 'effectors.Black_Hole'>":
                 if get_distance((self.x, self.y), (point.x, point.y)) < point.mass:
-                    self.kill()
                     self.killed = True
                     
                 #get the needed values
