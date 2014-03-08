@@ -1,8 +1,7 @@
-Screen:1000,1000
+Screen:600,600
 Text:Press play to start the level
 --
-Black Hole:1
+Trigger Left:1
 --
-Player:100,400,1,2
-Black Hole:300,500
-Finish:650,300,200,400
+Player:100,100,2,2
+Finish:100,350,200,200

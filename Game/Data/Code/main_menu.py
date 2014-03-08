@@ -15,7 +15,6 @@ def run_menu():
     pygame.init()
     
     music = Music("Menu")
-    music.stop_music()
     music.play_music()
     
     # Create screen with size (640, 480) and allow resizing
@@ -70,7 +69,8 @@ def run_menu():
         music.play_music()
     
     ##pygame.quit()
-    music.stop_music()
+    if music.song in music.songs:
+        music.stop_music()
         
 def options():
     pass

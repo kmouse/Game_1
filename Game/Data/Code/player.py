@@ -60,7 +60,7 @@ class Player(pygame.sprite.Sprite):
                         
             #apply the force from each of the  thrusters
             elif str(type(point)) == "<class 'effectors.Trigger_Left'>":
-                if point.rect.contains(self.rect):
+                if point.rect.colliderect(self.rect):
                     #get the needed values
                     direction = 3.141592 * 1.5
                     strength = 0.1
@@ -70,7 +70,7 @@ class Player(pygame.sprite.Sprite):
                     self.y -= (math.cos(direction) * strength / self.mass)
                     
             elif str(type(point)) == "<class 'effectors.Trigger_Right'>":
-                if point.rect.contains(self.rect):
+                if point.rect.colliderect(self.rect):
                     #get the needed values
                     direction = 3.141592 * 0.5
                     strength = 0.1
@@ -84,6 +84,10 @@ class Player(pygame.sprite.Sprite):
                     self.finish = True
                 else:
                     self.finish = False
+                    
+            elif str(type(point)) == "<class 'effectors.Death'>":
+                if point.rect.contains(self.rect):
+                    self.killed = True
                 
                 
                 

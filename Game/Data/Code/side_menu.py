@@ -60,14 +60,14 @@ class side_menu(pygame.sprite.Sprite):
         
         
         # Create the default menu buttons
-        self.buttons.append(Button(self.image, "Menu", "print('Menu')", "50", "height-30", image="Buttons\\small_button-white.png", highlight_image="Buttons\\small_button_highlighted-white.png", pressed_image="Buttons\\small_button_pressed-white.png", text_size=20))
+        Button(self.image, "Menu", "print('Menu')", "50", "height-30", image="Buttons\\small_button-white.png", highlight_image="Buttons\\small_button_highlighted-white.png", pressed_image="Buttons\\small_button_pressed-white.png", text_size=20, init_command="self.value=1", type="menu")
         
-        self.buttons.append(Button(self.image, "Options", "print('Options')", "width-50", "height-30", image="Buttons\\small_button-white.png", highlight_image="Buttons\\small_button_highlighted-white.png", pressed_image="Buttons\\small_button_pressed-white.png", text_size=20))
+        Button(self.image, "Levels", "print('Options')", "width-50", "height-30", image="Buttons\\small_button-white.png", highlight_image="Buttons\\small_button_highlighted-white.png", pressed_image="Buttons\\small_button_pressed-white.png", text_size=20, init_command="self.value=1", type="level select")
         
         # Game control buttons
-        self.buttons.append(Button(self.image, "Play", "print('Play')", "50", "height-100", image="Buttons\\small_button-white.png", highlight_image="Buttons\\small_button_highlighted-white.png", pressed_image="Buttons\\small_button_pressed-white.png", text_size=20, init_command="self.value=1", type="play game"))
+        Button(self.image, "Play", "print('Play')", "50", "height-100", image="Buttons\\small_button-white.png", highlight_image="Buttons\\small_button_highlighted-white.png", pressed_image="Buttons\\small_button_pressed-white.png", text_size=20, init_command="self.value=1", type="play game")
         
-        self.buttons.append(Button(self.image, "Restart", "print('Restart')", "width-50", "height-100", image="Buttons\\small_button-white.png", highlight_image="Buttons\\small_button_highlighted-white.png", pressed_image="Buttons\\small_button_pressed-white.png", text_size=20, init_command="self.value=1", type="restart game"))
+        Button(self.image, "Restart", "print('Restart')", "width-50", "height-100", image="Buttons\\small_button-white.png", highlight_image="Buttons\\small_button_highlighted-white.png", pressed_image="Buttons\\small_button_pressed-white.png", text_size=20, init_command="self.value=1", type="restart game")
         
         
         # Create the menu break for asthetic reasons
@@ -90,6 +90,11 @@ class side_menu(pygame.sprite.Sprite):
         for item in self.static_items:
             pressed = item.update((x - (screen.get_width() - 200), y), pygame.mouse.get_pressed(), self.image)
             if pressed and hasattr(item, "value") and item.value >= 0:
-                print("aaa")
                 self.commands.append(item.type)
+                if item.type == "play game":
+                    self.play()
         self.static_items.draw(self.image)
+        
+    def play(self):
+        for item in self.buttons:
+            item.kill()

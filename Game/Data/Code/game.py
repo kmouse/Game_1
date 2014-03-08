@@ -45,7 +45,8 @@ def level_select(screen):
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                exit_game = True
+                sys.exit()
+                ##exit_game = True
             if event.type == pygame.VIDEORESIZE:
                 screen = pygame.display.set_mode((event.size[0] if event.size[0] > 700 else 700, event.size[1] if event.size[1] > 500 else 500), pygame.RESIZABLE)
                 with open(get_file("Levels/levels_info.txt")) as f:
@@ -112,7 +113,7 @@ def run_game(screen, level):
         for event in pygame.event.get():
             # If the close button is pressed then quit
             if event.type == pygame.QUIT:
-                return True
+                sys.exit()
             # If the window is resized then update all objects
             if event.type == pygame.VIDEORESIZE:
                 print(event.size)
@@ -123,6 +124,36 @@ def run_game(screen, level):
                 
         # Update the side menu
         side.update(screen)
+        
+        if "menu" in side.commands:
+            return True
+        if "level select" in side.commands:
+            return False
+        if "restart game" in side.commands:
+            level_file = get_level(str(level) + ".txt")
+    
+            with open(level_file) as l:
+                level_objects = l.read()
+                        
+            # Get level items
+            level_items, player_items, game_items = level_objects.split("--\n")
+            level_items = level_items.split("\n")
+            screen = pygame.display.set_mode(screen.get_size(), pygame.RESIZABLE)
+            # Create the side menu and game
+            menu_group = pygame.sprite.Group()
+            side_menu.containers = menu_group
+            
+            # Initialise the side menu
+            side = side_menu(screen, player_items.split("\n"))
+            
+            # Initialise game
+            for item in level_items:
+                item = item.split(":")
+                if item[0] == "Screen":
+                    game_size = item[1].split(",")
+            
+            play_area = Game(screen, (int(game_size[0]), int(game_size[1])), game_items.split("\n"))
+            
         
         # Update the play area
         play_area.move(side.commands)

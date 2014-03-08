@@ -1,6 +1,6 @@
 import pygame
 from player import Player
-from effectors import Black_Hole, Finish, Trigger_Left, Trigger_Right
+from effectors import Black_Hole, Finish, Trigger_Left, Trigger_Right, Death
 
 ## # Music control buttons
 ## self.buttons.append(Button(self.image, "", "print('Back')", "40", "40", image="Buttons\\skip_backwards_button.png", highlight_image="Buttons\\skip_backwards_button_highlighted.png", pressed_image="Buttons\\skip_backwards_button_pressed.png", text_size=20))
@@ -39,6 +39,7 @@ class Game:
         Trigger_Left.containers = self.effectors
         Trigger_Right.containers = self.effectors
         Finish.containers = self.effectors
+        Death.containers = self.effectors
         
         self.effectors_class = []
         for item in items:
@@ -59,6 +60,9 @@ class Game:
             elif item[0] == "Finish":
                 x, y, width, height = item[1].split(",")
                 self.effectors_class.append(Finish(int(x), int(y), int(width), int(height)))
+            elif item[0] == "Death":
+                x, y, width, height = item[1].split(",")
+                self.effectors_class.append(Death(int(x), int(y), int(width), int(height)))
                 
                 
         self.simulate_game = False
@@ -83,11 +87,14 @@ class Game:
             elif command == "Create Trigger Left":
                 self.effectors_class.append(Trigger_Left(self.draw_area.width / 2, self.draw_area.height / 2, 150, 150))
             elif command == "Create Trigger Right":
-                self.effectors_class.append(Trigger_Left(self.draw_area.width / 2, self.draw_area.height / 2, 150, 150))
+                self.effectors_class.append(Trigger_Right(self.draw_area.width / 2, self.draw_area.height / 2, 150, 150))
                 
         # Simulate game if true
         if self.simulate_game:
             self.player.update(self.effectors_class)
+        else:
+            for item in self.player:
+                pygame.draw.line(self.image, (255, 0, 0), item.rect.center, (item.rect.centerx + (item.rect.centerx - item.lastpos[0]) * 25, item.rect.centery + (item.rect.centery - item.lastpos[1]) * 25), 1)
         self.finish = True
         for item in self.player:
             if item.finish == False:
