@@ -3,7 +3,7 @@ from mouse import Mouse
 from current_game import Game
 from load import get_level, get_file, get_music
 from level_select import Level_Select
-from music import Music
+from music_controls import Music_Controls
 from math import ceil
 import pygame
 import sys
@@ -98,9 +98,10 @@ def run_game(screen, level):
     play_area = Game(screen, (int(game_size[0]), int(game_size[1])), game_items.split("\n"))
     
     # Create music and additional music data
-    print(ceil((level * 8)/17))
-    music = Music(str(ceil((level * 8)/17)))
-    music.play_music()
+    music_group = pygame.sprite.Group()
+    Music_Controls.containers = music_group
+    music = Music_Controls(str(ceil((level * 8)/17)))
+    music.play_music(pygame.mouse.get_pos(), pygame.mouse.get_pressed())
     
     # Create the clock
     # This is used to limit the frame-rate
@@ -169,6 +170,8 @@ def run_game(screen, level):
         screen.fill((10, 20, 20), screen_fill)
         # Draw the game
         screen.blit(play_area.image, (0, 0), area=play_area.draw_area)
+        # Draw the music controls
+        music_group.draw(screen)
         # Draw mouse
         if pygame.mouse.get_focused(): x, y = pygame.mouse.get_pos(); screen.blit(mouse.image, (x - 5, y - 5))
         # Draw screen
@@ -177,7 +180,7 @@ def run_game(screen, level):
         clock.tick(60)
         
         
-        music.play_music()
+        music.play_music(pygame.mouse.get_pos(), pygame.mouse.get_pressed())
             
         if play_area.finish == True:
             if play_area.loose == False:

@@ -6,9 +6,10 @@ class Music:
         self.location = location
         self.songs = list_music(location)
         self.song = ""
+        self.play = True
         
     def play_music(self):
-        if not pygame.mixer.music.get_busy():
+        if not pygame.mixer.music.get_busy() and self.play:
             self.song = random.choice(self.songs)
             print(self.song)
             pygame.mixer.music.load(get_music(self.location + "\\" + self.song))
@@ -16,3 +17,17 @@ class Music:
             
     def stop_music(self):
         pygame.mixer.music.fadeout(2000)
+        
+    def skip(self):
+        self.song = random.choice(self.songs)
+        print(self.song)
+        pygame.mixer.music.load(get_music(self.location + "\\" + self.song))
+        if self.play:
+            pygame.mixer.music.play()
+        
+    def play_pause(self):
+        if self.play:
+            pygame.mixer.music.pause()
+        else:
+            pygame.mixer.music.play()
+        self.play = not self.play
