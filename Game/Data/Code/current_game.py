@@ -50,24 +50,26 @@ class Game:
                 Player(int(x), int(y), float(angle), float(velocity))
             elif item[0] == "Black Hole":
                 x, y = item[1].split(",")
-                self.effectors_class.append(Black_Hole(int(x), int(y)))
+                self.effectors_class.append(Black_Hole(int(x), int(y), False))
             elif item[0] == "Trigger_Left":
                 x, y, width, height = item[1].split(",")
-                self.effectors_class.append(Trigger_Left(int(x), int(y), int(width), int(height)))
+                self.effectors_class.append(Trigger_Left(int(x), int(y), int(width), int(height), False))
             elif item[0] == "Trigger_Right":
                 x, y, width, height = item[1].split(",")
-                self.effectors_class.append(Trigger_Right(int(x), int(y), int(width), int(height)))
+                self.effectors_class.append(Trigger_Right(int(x), int(y), int(width), int(height), False))
             elif item[0] == "Finish":
                 x, y, width, height = item[1].split(",")
                 self.effectors_class.append(Finish(int(x), int(y), int(width), int(height)))
             elif item[0] == "Death":
                 x, y, width, height = item[1].split(",")
                 self.effectors_class.append(Death(int(x), int(y), int(width), int(height)))
-                
-                
+        
+        
         self.simulate_game = False
         self.loose = False
-                
+        
+        self.pieces = []
+        
         
     def update_size(self, screen):
         # Update the size of the draw area on screen resize
@@ -100,17 +102,11 @@ class Game:
             if item.finish == False:
                 self.finish = False
             if item.killed == True:
-                print("deaded")
                 self.loose = True
                 self.finish = True
-        self.player.draw(self.image)
-        self.effectors.draw(self.image)
         # Get the new mouse events
         mouse = pygame.mouse.get_pressed()
         move = pygame.mouse.get_rel()
-        
-        for item in self.effectors_class:
-            item.update(pygame.mouse.get_pos(), mouse, self.pos)
         
         # Move the screen if the mouse is pressed and the mouse was pressed on the game area
         mouse_rect = pygame.Rect(pygame.mouse.get_pos(), (1, 1))
@@ -130,8 +126,23 @@ class Game:
             self.pos[0] -= move[0]
             self.pos[1] -= move[1]
         else:
+            if not mouse[0]:
+                for item in range(len(self.effectors_class)):
+                    if self.effectors_class[item].move == True:
+                        self.pieces.append(self.effectors_class[item].type)
+                        self.effectors_class[item].kill()
+                        self.effectors_class.pop(item)
+            
             self.allow_move = 0
             
+        
+        for item in self.effectors_class:
+            item.update(pygame.mouse.get_pos(), mouse, self.pos)
+            
+        
+        self.player.draw(self.image)
+        self.effectors.draw(self.image)
+        
         self.draw_area.topleft = self.pos
         
         

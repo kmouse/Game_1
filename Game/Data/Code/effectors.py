@@ -2,9 +2,11 @@ import pygame
 from load import get_image
 
 class Black_Hole(pygame.sprite.Sprite):
-    def __init__(self, x, y):
+    def __init__(self, x, y, move=True):
         # Initialise the sprite module
         pygame.sprite.Sprite.__init__(self, self.containers)
+        
+        self.type = "Black Hole"
         # Make the image
         self.image = pygame.image.load(get_image("Gameplay_Objects\\black_hole.png"))
         
@@ -16,7 +18,7 @@ class Black_Hole(pygame.sprite.Sprite):
         self.x = x
         self.y = y
         
-        self.move = True
+        self.move = move
         
     def update(self, mouse_pos, mouse_pressed, offset):
         if mouse_pressed[0]:
@@ -30,9 +32,11 @@ class Black_Hole(pygame.sprite.Sprite):
         
         
 class Trigger_Left(pygame.sprite.Sprite):
-    def __init__(self, x, y, width, height):
+    def __init__(self, x, y, width, height, move=True):
          # Initialise the sprite module
         pygame.sprite.Sprite.__init__(self, self.containers)
+        
+        self.type = "Trigger Left"
         # Make the image
         self.image = pygame.Surface((width, height), pygame.SRCALPHA)
         self.image.fill((0, 0, 0, 0))
@@ -51,7 +55,7 @@ class Trigger_Left(pygame.sprite.Sprite):
         self.width = width
         self.height = height
         
-        self.move = True
+        self.move = move
         
     def update(self, mouse_pos, mouse_pressed, offset):
         if mouse_pressed[0]:
@@ -64,9 +68,12 @@ class Trigger_Left(pygame.sprite.Sprite):
         
         
 class Trigger_Right(pygame.sprite.Sprite):
-    def __init__(self, x, y, width, height):
+    def __init__(self, x, y, width, height, move=True):
          # Initialise the sprite module
         pygame.sprite.Sprite.__init__(self, self.containers)
+        
+        self.type = "Trigger Right"
+        
         # Make the image
         self.image = pygame.Surface((width, height), pygame.SRCALPHA)
         self.image.fill((0, 0, 0, 0))
@@ -85,7 +92,7 @@ class Trigger_Right(pygame.sprite.Sprite):
         self.width = width
         self.height = height
         
-        self.move = True
+        self.move = move
         
     def update(self, mouse_pos, mouse_pressed, offset):
         if mouse_pressed[0]:
@@ -113,6 +120,8 @@ class Finish(pygame.sprite.Sprite):
         self.width = width
         self.height = height
         
+        self.move = False
+        
     def update(self, mouse_pos, mouse_pressed, offset):
         pass
         
@@ -125,7 +134,10 @@ class Death(pygame.sprite.Sprite):
         self.image = pygame.Surface((width, height), pygame.SRCALPHA)
         self.image.fill((0, 0, 0, 0))
         
-        pygame.draw.rect(self.image, (255, 0, 0), self.image.get_rect(), 3)
+        # Make the image
+        clouds = pygame.image.load(get_image("Gameplay_Objects\\clouds.png"))
+        self.image.blit(clouds, (0, 0))
+        #pygame.draw.rect(self.image, (255, 0, 0), self.image.get_rect(), 3)
         
         self.rect = pygame.Rect((x, y), (width, height))
         
@@ -134,6 +146,8 @@ class Death(pygame.sprite.Sprite):
         
         self.width = width
         self.height = height
+        
+        self.move = False
         
     def update(self, mouse_pos, mouse_pressed, offset):
         pass

@@ -21,7 +21,8 @@ REDUCE_NUMBER_CODE = """if self.value > 0:
 else:
     self.value -= 1"""
     
-    
+
+BLUE = (30, 133, 145)
     
 class side_menu(pygame.sprite.Sprite):
     def __init__(self, screen, items):
@@ -84,8 +85,15 @@ class side_menu(pygame.sprite.Sprite):
         for item in self.static_items:
             item.update_pos(self.image)
         
-    def update(self, screen):
-        self.image.fill((30, 133, 145))
+    def update(self, screen, pieces):
+        for button in self.buttons:
+            for piece in pieces:
+                if piece in button.type:
+                    button.value += 2
+                    button.run_command()
+                    
+                    
+        self.image.fill(BLUE)
         x, y = pygame.mouse.get_pos()
         for item in self.static_items:
             pressed = item.update((x - (screen.get_width() - 200), y), pygame.mouse.get_pressed(), self.image)
@@ -97,4 +105,5 @@ class side_menu(pygame.sprite.Sprite):
         
     def play(self):
         for item in self.buttons:
-            item.kill()
+            item.value = 1
+            item.run_command()

@@ -47,11 +47,12 @@ class Button(pygame.sprite.Sprite):
             
         # This is the command run when the button is pressed
         self.command = command
+        self.init_command = init_command
         
         self.press_method = press_method
         
         # Run the init_command
-        exec(init_command)
+        self.run_init_command()
         
     # Get the pos for the new screen size
     def update_pos(self, screen):
@@ -71,13 +72,13 @@ class Button(pygame.sprite.Sprite):
                 self.image = self.pressed_image
             elif mouse_down[0] and self.pressed == 1:
                 self.pressed = 1
-                if self.press_method == "mouse down": exec(self.command); self.pressed = 2; pressed = True
+                if self.press_method == "mouse down": self.run_command(); self.pressed = 2; pressed = True
                 self.image = self.pressed_image
             elif mouse_down[0] and self.pressed == 2:
                 self.pressed = 2
             else:
                 if self.pressed == 1:
-                    if self.press_method == "click": exec(self.command)
+                    if self.press_method == "click": self.run_command()
                     pressed = True
                 self.pressed = 0
                 self.image = self.highlight_image
@@ -97,3 +98,9 @@ class Button(pygame.sprite.Sprite):
         self.update_pos(screen)
         
         return pressed
+        
+    def run_init_command(self):
+        exec(self.init_command)
+        
+    def run_command(self):
+        exec(self.command)

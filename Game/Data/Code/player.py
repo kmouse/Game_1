@@ -86,7 +86,7 @@ class Player(pygame.sprite.Sprite):
                     self.finish = False
                     
             elif str(type(point)) == "<class 'effectors.Death'>":
-                if point.rect.contains(self.rect):
+                if point.rect.colliderect(self.rect):
                     self.killed = True
                 
                 

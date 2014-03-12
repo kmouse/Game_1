@@ -123,7 +123,8 @@ def run_game(screen, level):
                 
                 
         # Update the side menu
-        side.update(screen)
+        side.update(screen, play_area.pieces)
+        play_area.pieces = []
         
         if "menu" in side.commands:
             return True
