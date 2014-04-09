@@ -29,5 +29,5 @@ class Music:
         if self.play:
             pygame.mixer.music.pause()
         else:
-            pygame.mixer.music.play()
+            pygame.mixer.music.unpause()
         self.play = not self.play

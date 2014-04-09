@@ -1,6 +1,7 @@
 BLUE = (30, 133, 145)
 from button import Button
 from music import Music
+from load import get_font
 import pygame
 
 PLAY_PAUSE_LOAD_IMAGES = """self.value = 1
@@ -26,9 +27,12 @@ class Music_Controls(pygame.sprite.Sprite):
     def __init__(self, location):
         # Initialise the sprite module
         pygame.sprite.Sprite.__init__(self, self.containers)
+
+        font = pygame.font.Font(get_font('arial.ttf'), 15)
+        self.font_surface = font.render("Music", 1, (0, 0, 0))
         
         # Make the image
-        self.image = pygame.Surface((120, 50))
+        self.image = pygame.Surface((120, 50 + self.font_surface.get_height() - 5))
         
         self.image.fill(BLUE)
         
@@ -40,10 +44,13 @@ class Music_Controls(pygame.sprite.Sprite):
         self.button_group = pygame.sprite.Group()
         Button.containers = self.button_group
         
-        self.buttons.append(Button(self.image, "", PLAY_PAUSE_SWAP_IMAGE, "width/4", "height/2", image="Buttons\\pause_button.png", highlight_image="Buttons\\pause_button_highlighted.png", pressed_image="Buttons\\pause_button_pressed.png", type="play pause", init_command=PLAY_PAUSE_LOAD_IMAGES))
-        self.buttons.append(Button(self.image, "", "", "width*3/4", "height/2", image="Buttons\\skip_forwards_button.png", highlight_image="Buttons\\skip_forwards_button_highlighted.png", pressed_image="Buttons//skip_forwards_button_pressed.png", type="skip"))
+        self.buttons.append(Button(self.image, "", PLAY_PAUSE_SWAP_IMAGE, "width/4", "25+(height-50)", image="Buttons\\pause_button.png", highlight_image="Buttons\\pause_button_highlighted.png", pressed_image="Buttons\\pause_button_pressed.png", type="play pause", init_command=PLAY_PAUSE_LOAD_IMAGES))
+        self.buttons.append(Button(self.image, "", "", "width*3/4", "25+(height-50)", image="Buttons\\skip_forwards_button.png", highlight_image="Buttons\\skip_forwards_button_highlighted.png", pressed_image="Buttons//skip_forwards_button_pressed.png", type="skip"))
         
         self.button_group.draw(self.image)
+        
+        font = pygame.font.Font(get_font('arial.ttf'), 15)
+        self.font_surface = font.render("Music", 1, (255, 255, 255))
         
         # Create music
         self.music = Music(location)
@@ -61,4 +68,5 @@ class Music_Controls(pygame.sprite.Sprite):
                     self.music.play_pause()
         self.button_group.draw(self.image)
         
+        self.image.blit(self.font_surface, (12, 0))
         self.music.play_music()

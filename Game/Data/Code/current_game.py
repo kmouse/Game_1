@@ -1,13 +1,6 @@
 import pygame
 from player import Player
 from effectors import Black_Hole, Finish, Trigger_Left, Trigger_Right, Death
-
-## # Music control buttons
-## self.buttons.append(Button(self.image, "", "print('Back')", "40", "40", image="Buttons\\skip_backwards_button.png", highlight_image="Buttons\\skip_backwards_button_highlighted.png", pressed_image="Buttons\\skip_backwards_button_pressed.png", text_size=20))
-        
-## self.buttons.append(Button(self.image, "", "print('Play')", "width/2", "40", image="Buttons\\play_button.png", highlight_image="Buttons\\play_button_highlighted.png", pressed_image="Buttons\\play_button_pressed.png", text_size=20))
-        
-## self.buttons.append(Button(self.image, "", "print('Forward')", "width-40", "40", image="Buttons\\skip_forwards_button.png", highlight_image="Buttons\\skip_forwards_button_highlighted.png", pressed_image="Buttons\\skip_forwards_button_pressed.png", text_size=20))
         
         
 class Game:
@@ -110,10 +103,11 @@ class Game:
         
         # Move the screen if the mouse is pressed and the mouse was pressed on the game area
         mouse_rect = pygame.Rect(pygame.mouse.get_pos(), (1, 1))
+        music_rect = pygame.Rect(20,20,120,50)
         ## POSSIBLE DODGY HACK
         screen_area = pygame.Rect(self.draw_area)
         screen_area.topleft = (0, 0)
-        if screen_area.colliderect(mouse_rect):
+        if screen_area.colliderect(mouse_rect) and not music_rect.colliderect(mouse_rect):
             if mouse[2] and self.allow_move != 0:
                 self.allow_move = 2
                 self.pos[0] -= move[0]
@@ -138,10 +132,13 @@ class Game:
         
         for item in self.effectors_class:
             item.update(pygame.mouse.get_pos(), mouse, self.pos)
-            
+        mouse_pos = pygame.mouse.get_pos()
+        mouse_pos = mouse_pos[0] + self.pos[0], mouse_pos[1] + self.pos[1]
         
         self.player.draw(self.image)
         self.effectors.draw(self.image)
+        #for item in self.player:
+        #    pygame.draw.line(self.image, (255, 0, 0), (self.pos[0] + self.image.get_width() / 4, self.pos[1] + self.image.get_height() / 4), item.rect.center, 2)
         
         self.draw_area.topleft = self.pos
         

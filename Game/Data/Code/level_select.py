@@ -1,7 +1,7 @@
 import pygame
 from button import Button
 
-BACKGROUND_COLOR = (0, 152, 0)
+BACKGROUND_COLOR = (15, 24, 122)
 
 class Level_Select:
     def __init__(self, screen, levels, unlocked):

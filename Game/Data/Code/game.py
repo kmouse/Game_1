@@ -46,7 +46,6 @@ def level_select(screen):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
-                ##exit_game = True
             if event.type == pygame.VIDEORESIZE:
                 screen = pygame.display.set_mode((event.size[0] if event.size[0] > 700 else 700, event.size[1] if event.size[1] > 500 else 500), pygame.RESIZABLE)
                 with open(get_file("Levels/levels_info.txt")) as f:
@@ -93,7 +92,7 @@ def run_game(screen, level):
         item = item.split(":")
         if item[0] == "Screen":
             game_size = item[1].split(",")
-    print(game_size, game_size)
+    print(game_size)
     
     play_area = Game(screen, (int(game_size[0]), int(game_size[1])), game_items.split("\n"))
     
