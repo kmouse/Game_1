@@ -9,11 +9,12 @@ import pygame
 import sys
 import random
         
+START_SIZE = (700, 500)
         
 def control_game():
     pygame.init()
     # Create the screen
-    screen = pygame.display.set_mode((700, 500), pygame.RESIZABLE)
+    screen = pygame.display.set_mode(START_SIZE, pygame.RESIZABLE)
     pygame.mouse.set_visible(0)
     print ("control game")
     # Get the users requested level
@@ -47,7 +48,7 @@ def level_select(screen):
             if event.type == pygame.QUIT:
                 sys.exit()
             if event.type == pygame.VIDEORESIZE:
-                screen = pygame.display.set_mode((event.size[0] if event.size[0] > 700 else 700, event.size[1] if event.size[1] > 500 else 500), pygame.RESIZABLE)
+                screen = pygame.display.set_mode((max(event.size[0], START_SIZE[0]), max(event.size[1], START_SIZE[1])), pygame.RESIZABLE)
                 with open(get_file("Levels/levels_info.txt")) as f:
                     num_levels = int(f.readline())
                     unlocked_levels = int(f.readline())
@@ -57,15 +58,19 @@ def level_select(screen):
                 if event.key == pygame.K_F11:
                     fullscreen = not fullscreen
                     print("Fullscreeeen!!!")
-                    pygame.display.set_mode((0,0), pygame.FULLSCREEN if fullscreen else pygame.RESIZABLE)
+                    # (0, 0) as size sets to the screen resolution
+                    pygame.display.set_mode((0, 0), pygame.FULLSCREEN if fullscreen else pygame.RESIZABLE)
                 
         pressed = selector.update(pygame.mouse.get_pos(), pygame.mouse.get_pressed())
         screen.blit(selector.image, (0, 0))
-        if pygame.mouse.get_focused(): x, y = pygame.mouse.get_pos(); screen.blit(mouse.image, (x - 5, y - 5))
+        if pygame.mouse.get_focused():
+            x, y = pygame.mouse.get_pos()
+            screen.blit(mouse.image, (x - 5, y - 5))
         pygame.display.update()
         
         
-        if pressed or exit_game: break
+        if pressed or exit_game:
+            break
     return pressed, exit_game
     
     
@@ -172,7 +177,9 @@ def run_game(screen, level):
         # Draw the music controls
         music_group.draw(screen)
         # Draw mouse
-        if pygame.mouse.get_focused(): x, y = pygame.mouse.get_pos(); screen.blit(mouse.image, (x - 5, y - 5))
+        if pygame.mouse.get_focused():
+            x, y = pygame.mouse.get_pos()
+            screen.blit(mouse.image, (x - 5, y - 5))
         # Draw screen
         pygame.display.update()
         # Cap framerate

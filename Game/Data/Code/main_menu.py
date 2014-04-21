@@ -2,12 +2,15 @@ from button import Button
 from image import Image
 from mouse import Mouse
 from music import Music
+from load import get_image
 import pygame
 import sys
 
 BACKGROUND = (239, 255, 168)
 BLACK = (25, 25, 25)
 WHITE = (225, 225, 225)
+FPS = 60
+START_SIZE = (640, 480)
 
 
 def run_menu():
@@ -17,8 +20,10 @@ def run_menu():
     music = Music("Menu")
     music.play_music()
     
-    # Create screen with size (640, 480) and allow resizing
-    screen = pygame.display.set_mode((640, 480), pygame.RESIZABLE)
+    # Create screen with size START_SIZE and allow resizing
+    screen = pygame.display.set_mode(START_SIZE, pygame.RESIZABLE)
+    
+    pygame.display.set_icon(pygame.image.load(get_image("Static_Images\\icon.png")))
     
     # Hide the mouse
     pygame.mouse.set_visible(0)
@@ -30,7 +35,7 @@ def run_menu():
     
     # Create the buttons
     start_button = Button(screen, "Start", "self.exit = True", "width/2", "((height - 220) / 8) * 1 + 220", init_command="self.exit = False")
-    options_button = Button(screen, "Options", "print('1')", "width/2", "((height - 220) / 8) * 3 + 220")
+    options_button = Button(screen, "Help", "print('1')", "width/2", "((height - 220) / 8) * 3 + 220")
     quit_button = Button(screen, "Quit", "import sys; sys.exit()", "width/2", "((height - 220) / 8) * 5 + 220")
     
     # Create the title
@@ -53,7 +58,7 @@ def run_menu():
                 sys.exit()
             # If screen is resized then move items to new positions
             if event.type == pygame.VIDEORESIZE:
-                screen = pygame.display.set_mode((event.size[0] if event.size[0] > 400 else 400, event.size[1] if event.size[1] > 400 else 400), pygame.RESIZABLE)
+                screen = pygame.display.set_mode((max(event.size[0], 400), max(event.size[1], 400)), pygame.RESIZABLE)
                 for item in static_items:
                     item.update_pos(screen)
                     
@@ -64,7 +69,7 @@ def run_menu():
         # Draw mouse
         if pygame.mouse.get_focused(): screen.blit(mouse.image, pygame.mouse.get_pos())
         pygame.display.update()
-        clock.tick(60)
+        clock.tick(FPS)
         
         music.play_music()
     
