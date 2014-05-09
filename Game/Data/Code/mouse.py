@@ -6,6 +6,7 @@ SIZE = (10, 10)
 
 class Mouse:
     def __init__(self, color=(47, 204, 222)):
+        
         self.image = pygame.Surface(SIZE, pygame.SRCALPHA)
         self.image.fill(TRANSPARENT)
         # Draw a circle with a black outline

@@ -1,5 +1,4 @@
 import pygame
-import os
 from load import get_image
 
 # This is the base class for any button object

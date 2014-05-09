@@ -3,6 +3,10 @@ from button import Button
 from music import Music
 from load import get_font
 import pygame
+import logging
+
+# Log debug and higher calls to this file
+logging.basicConfig(filename='game.log', level=logging.DEBUG)
 
 PLAY_PAUSE_LOAD_IMAGES = """self.value = 1
 self.images1 = (pygame.image.load(get_image("Buttons\\play_button.png")).convert_alpha(), pygame.image.load(get_image("Buttons\\play_button_highlighted.png")).convert_alpha(), pygame.image.load(get_image("Buttons\\play_button_pressed.png")).convert_alpha())
@@ -25,6 +29,7 @@ self.image = self.plain_image
     
 class Music_Controls(pygame.sprite.Sprite):
     def __init__(self, location):
+        logging.debug("Initialising music controls")
         # Initialise the sprite module
         pygame.sprite.Sprite.__init__(self, self.containers)
 

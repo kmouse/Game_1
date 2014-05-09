@@ -2,10 +2,16 @@ from load import get_image
 from calculations import get_distance, get_angle
 import pygame
 import math
+import logging
+
+# Log debug and higher calls to this file
+logging.basicConfig(filename='game.log', level=logging.DEBUG)
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, x, y, angle, velocity):
-        print(x, y, angle, velocity)
+        logging.debug("Initialising player")
+        logging.info("Player position: " + str(x) + ", " + str(y))
+        logging.info("Player vector (Magnitude, direction): " + str(velocity) + ", " + str(angle))
         # Initialise the sprite module
         pygame.sprite.Sprite.__init__(self, self.containers)
         # Make the image
