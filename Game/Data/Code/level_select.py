@@ -1,6 +1,6 @@
 import pygame
 from math import ceil
-from button import Button
+from Data.Code.button import Button
 
 
 BACKGROUND_COLOR = (15, 24, 122)
@@ -41,7 +41,6 @@ class Level_Select:
         self.buttons = pygame.sprite.Group()
         Button.containers = self.buttons
         
-        print (size[0] // DIST, ceil(levels / (size[0] // DIST)), ceil(levels / (size[0] // DIST)) * DIST)
         # Go along and place the buttons right to left, top to bottom, leaving DIST distance between them
         for item in range(levels):
             if item + 1 <= unlocked:

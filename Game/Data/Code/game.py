@@ -1,10 +1,11 @@
-from side_menu import side_menu
-from mouse import Mouse
-from current_game import Game
-from load import get_level, get_file, get_music
-from level_select import Level_Select
-from music_controls import Music_Controls
-from cutscene import Cutscene
+from Data.Code.side_menu import side_menu
+from Data.Code.mouse import Mouse
+from Data.Code.current_game import Game
+from Data.Code.load import get_level, get_file, get_music
+from Data.Code.level_select import Level_Select
+from Data.Code.music_controls import Music_Controls
+from Data.Code.cutscene import Cutscene
+from Data.Code.credits import credits
 from math import ceil
 import pygame
 import sys
@@ -29,14 +30,7 @@ def control_game():
     else:
         screen = pygame.display.set_mode(START_SIZE, pygame.RESIZABLE)
     pygame.mouse.set_visible(0)
-    print ("control game")
-    cut = Cutscene(screen, "Static_Images/Cutscenes/1-intro_planet.png")
-    while True:
-        screen.blit(cut.image, (0, 0))
-        pygame.display.update()
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                sys.exit()
+    
     # Get the users requested level
     end_game = False
     end_select = False
@@ -55,7 +49,6 @@ def level_select(screen):
     DIST = 140
     
     
-    print("level select")
     exit_game = False
     
     # Initialise the mouse
@@ -83,7 +76,6 @@ def level_select(screen):
             ## MAKE WORK NOT URGENT BUT SHOULD BE DONE BEFORE UPLOADING
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_F11:
-                    print ("Fullscreen!!")
                     # get the flags of the surface
                     old_screen = pygame.display.get_surface()
                     
@@ -106,6 +98,7 @@ def level_select(screen):
     
 def run_game(screen, level):
 
+    credits(screen)
     level_file = get_level(str(level) + ".txt")
     
     with open(level_file) as l:
@@ -114,7 +107,7 @@ def run_game(screen, level):
     # Get level items
     level_items, player_items, game_items = level_objects.split("--\n")
     level_items = level_items.split("\n")
-    ##screen = pygame.display.set_mode(screen.get_size(), pygame.RESIZABLE)
+    
     # Create the side menu and game
     menu_group = pygame.sprite.Group()
     side_menu.containers = menu_group
@@ -127,7 +120,24 @@ def run_game(screen, level):
         item = item.split(":")
         if item[0] == "Screen":
             game_size = item[1].split(",")
-    print(game_size)
+        if item[0] == "Cutscene":
+            cut = Cutscene(screen, item[1])
+            show_cutscene = True
+            while show_cutscene:
+                screen.fill((0, 0, 0))
+                screen.blit(cut.image, (screen.get_width() / 2 - cut.image.get_width() / 2, screen.get_height() / 2 - cut.image.get_height() / 2))
+                pygame.display.update()
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        sys.exit()
+                    if event.type == pygame.KEYDOWN:
+                        show_cutscene = False
+                    # If the window is resized then update all objects
+                    if event.type == pygame.VIDEORESIZE:
+                        old_screen = pygame.display.get_surface()
+                        screen = pygame.display.set_mode((max(event.size[0], 700), max(event.size[1], 500)), old_screen.get_flags())
+                        side.update_pos(screen)
+                        play_area.update_size(screen)
     
     play_area = Game(screen, (int(game_size[0]), int(game_size[1])), game_items.split("\n"))
     
@@ -149,16 +159,18 @@ def run_game(screen, level):
             # If the close button is pressed then quit
             if event.type == pygame.QUIT:
                 sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    side.commands.append("play game")
+                    side.play()
             # If the window is resized then update all objects
             if event.type == pygame.VIDEORESIZE:
-                print(event.size)
                 old_screen = pygame.display.get_surface()
-                screen = pygame.display.set_mode((event.size[0] if event.size[0] > 700 else 700, event.size[1] if event.size[1] > 500 else 500), old_screen.get_flags())
+                screen = pygame.display.set_mode((max(event.size[0], 700), max(event.size[1], 500)), old_screen.get_flags())
                 side.update_pos(screen)
                 play_area.update_size(screen)
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_F11:
-                    print ("Fullscreen!!")
                     # get the flags of the surface
                     old_screen = pygame.display.get_surface()
                     
@@ -169,7 +181,6 @@ def run_game(screen, level):
         # Update the side menu
         side.update(screen, play_area.pieces)
         play_area.pieces = []
-        
         if "menu" in side.commands:
             return True
         if "level select" in side.commands:

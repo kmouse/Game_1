@@ -1,5 +1,5 @@
 import pygame
-from load import get_image
+from Data.Code.load import get_image
 
 class Black_Hole(pygame.sprite.Sprite):
     def __init__(self, x, y, move=True):

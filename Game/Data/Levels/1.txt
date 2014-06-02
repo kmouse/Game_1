@@ -1,5 +1,6 @@
 Screen:1000,1000
 Text:Press play to start the level
+Cutscene:1-intro_planet.png
 --
 Black Hole:1
 --

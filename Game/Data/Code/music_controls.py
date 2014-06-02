@@ -1,7 +1,7 @@
 BLUE = (30, 133, 145)
-from button import Button
-from music import Music
-from load import get_font
+from Data.Code.button import Button
+from Data.Code.music import Music
+from Data.Code.load import get_font
 import pygame
 import logging
 
@@ -13,9 +13,7 @@ self.images1 = (pygame.image.load(get_image("Buttons\\play_button.png")).convert
 
 self.images2 = (pygame.image.load(get_image("Buttons\\pause_button.png")).convert_alpha(), pygame.image.load(get_image("Buttons\\pause_button_highlighted.png")).convert_alpha(), pygame.image.load(get_image("Buttons\\pause_button_pressed.png")).convert_alpha())"""
 
-PLAY_PAUSE_SWAP_IMAGE = """print(self.value)
-self.value = 1 if self.value == 0 else 0
-print(self.value)
+PLAY_PAUSE_SWAP_IMAGE = """self.value = 1 if self.value == 0 else 0
 if self.value == 0:
     self.plain_image = self.images1[0]
     self.highlight_image = self.images1[1]

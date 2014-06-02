@@ -1,5 +1,5 @@
-from load import get_image
-from calculations import get_distance, get_angle
+from Data.Code.load import get_image
+from Data.Code.calculations import get_distance, get_angle
 import pygame
 import math
 import logging
@@ -46,7 +46,7 @@ class Player(pygame.sprite.Sprite):
 
         #apply the gravity from each of the points
         for point in effectors:
-            if str(type(point)) == "<class 'effectors.Black_Hole'>":
+            if str(type(point)) == "<class 'Data.Code.effectors.Black_Hole'>":
                 if get_distance((self.x, self.y), (point.x, point.y)) < point.mass:
                     self.killed = True
                     
@@ -65,7 +65,7 @@ class Player(pygame.sprite.Sprite):
                 ##pygame.draw.line(screen, (color, color, 10), (self.x, self.y), (point.x, point.y), 1)
                         
             #apply the force from each of the  thrusters
-            elif str(type(point)) == "<class 'effectors.Trigger_Left'>":
+            elif str(type(point)) == "<class 'Data.Code.effectors.Trigger_Left'>":
                 if point.rect.colliderect(self.rect):
                     #get the needed values
                     direction = 3.141592 * 1.5
@@ -75,7 +75,7 @@ class Player(pygame.sprite.Sprite):
                     self.x += (math.sin(direction) * strength / self.mass)
                     self.y -= (math.cos(direction) * strength / self.mass)
                     
-            elif str(type(point)) == "<class 'effectors.Trigger_Right'>":
+            elif str(type(point)) == "<class 'Data.Code.effectors.Trigger_Right'>":
                 if point.rect.colliderect(self.rect):
                     #get the needed values
                     direction = 3.141592 * 0.5
@@ -85,13 +85,13 @@ class Player(pygame.sprite.Sprite):
                     self.x += (math.sin(direction) * strength / self.mass)
                     self.y -= (math.cos(direction) * strength / self.mass)
                 
-            elif str(type(point)) == "<class 'effectors.Finish'>":
+            elif str(type(point)) == "<class 'Data.Code.effectors.Finish'>":
                 if point.rect.contains(self.rect):
                     self.finish = True
                 else:
                     self.finish = False
                     
-            elif str(type(point)) == "<class 'effectors.Death'>":
+            elif str(type(point)) == "<class 'Data.Code.effectors.Death'>":
                 if point.rect.colliderect(self.rect):
                     self.killed = True
                 

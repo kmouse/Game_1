@@ -1,28 +1,53 @@
 import pygame
 import os
-from load import get_image, get_font
+from Data.Code.load import get_image, get_font
 
 pygame.init()
 
+def resize_image(width, height, location):
+    image = pygame.image.load(get_image(location)).convert_alpha()
+    if width == 0:
+        width = image.get_width()
+    if height == 0:
+        height = image.get_height()
+    image = pygame.transform.scale(image, (width, height))
+    return image
+
 # This is the base class for any button object
 class Button(pygame.sprite.Sprite):
-    def __init__(self, screen, text, command, x, y, width=64, height=20, image="Buttons\\button.png", highlight_image="Buttons\\button_highlighted.png", pressed_image="Buttons\\button_pressed.png", init_command="", text_size=24, text_align="center", type="Button", press_method="click"):
+    def __init__(self, screen, text, command, x, y, width=0, height=0, image="Buttons\\button.png", highlight_image="Buttons\\button_highlighted.png", pressed_image="Buttons\\button_pressed.png", init_command="", text_size=24, text_align="center", image_align="center", type="Button", press_method="click"):
         # Initialise the sprite module
         pygame.sprite.Sprite.__init__(self, self.containers)
         # Make the image
-        self.image = pygame.image.load(get_image(image)).convert_alpha()
+        self.image = resize_image(width, height, image)
+        
+        self.image_align = image_align
         
         # Set up the rect for drawing
-        self.rect = self.image.get_rect()
-        self.rect.center = eval(x, {"width":screen.get_width()}), eval(y, {"height":screen.get_height()})
+        # if the width or height is 0, that is the default width or height for the image
+        if width == 0:
+            self.rect_width = self.image.get_width()
+        else:
+            self.rect_width = width
+        
+        if height == 0:
+            self.rect_height = self.image.get_height()
+        else:
+            self.rect_height = height
+            
+        self.rect = pygame.Rect(0, 0, self.rect_width, self.rect_height)
+        if self.image_align == "center":
+            self.rect.center = eval(x, {"width":screen.get_width()}), eval(y, {"height":screen.get_height()})
+        elif self.image_align == "topleft":
+            self.rect.topleft = eval(x, {"width":screen.get_width()}), eval(y, {"height":screen.get_height()})
         
         # Stores the equations for positions
         self.position_formula = x, y
         
         # Store the images
-        self.plain_image = pygame.image.load(get_image(image)).convert_alpha()
-        self.highlight_image = pygame.image.load(get_image(highlight_image)).convert_alpha()
-        self.pressed_image = pygame.image.load(get_image(pressed_image)).convert_alpha()
+        self.plain_image = resize_image(width, height, image)
+        self.highlight_image = resize_image(width, height, highlight_image)
+        self.pressed_image = resize_image(width, height, pressed_image)
         
         # This gets whether the mouse pressed self
         self.pressed = 0
@@ -56,7 +81,10 @@ class Button(pygame.sprite.Sprite):
         
     # Get the pos for the new screen size
     def update_pos(self, screen):
-        self.rect.center = eval(self.position_formula[0], {"width":screen.get_width()}), eval(self.position_formula[1], {"height":screen.get_height()})
+        if self.image_align == "center":
+            self.rect.center = eval(self.position_formula[0], {"width":screen.get_width()}), eval(self.position_formula[1], {"height":screen.get_height()})
+        elif self.image_align == "topleft":
+            self.rect.topleft = eval(self.position_formula[0], {"width":screen.get_width()}), eval(self.position_formula[1], {"height":screen.get_height()})
         
     def update(self, mouse_pos, mouse_down, screen):
         pressed = False
@@ -94,7 +122,7 @@ class Button(pygame.sprite.Sprite):
             self.image = self.plain_image
         
         # Update rect
-        self.rect = self.image.get_rect()
+        self.rect = pygame.Rect(0, 0, self.rect_width, self.rect_height)
         self.update_pos(screen)
         
         return pressed

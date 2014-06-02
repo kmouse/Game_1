@@ -1,5 +1,5 @@
 import pygame, random
-from load import get_music, list_music
+from Data.Code.load import get_music, list_music
 import logging
 
 # Log debug and higher calls to this file

@@ -1,5 +1,5 @@
-from main_menu import run_menu
-from game import control_game
+from Data.Code.main_menu import run_menu
+from Data.Code.game import control_game
 import logging
 
 # Log debug and higher calls to this file

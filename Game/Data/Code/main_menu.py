@@ -1,8 +1,8 @@
-from button import Button
-from image import Image
-from mouse import Mouse
-from music import Music
-from load import get_image
+from Data.Code.button import Button
+from Data.Code.image import Image
+from Data.Code.mouse import Mouse
+from Data.Code.music import Music
+from Data.Code.load import get_image
 import pygame
 import sys
 import ctypes
@@ -48,7 +48,7 @@ def run_menu():
     logging.info("Creating menu buttons")
     # Create the buttons
     start_button = Button(screen, "Start", "self.exit = True", "width/2", "((height - 220) / 8) * 1 + 220", init_command="self.exit = False")
-    options_button = Button(screen, "Help", "print('1')", "width/2", "((height - 220) / 8) * 3 + 220")
+    options_button = Button(screen, "Help", "", "width/2", "((height - 220) / 8) * 3 + 220")
     quit_button = Button(screen, "Quit", "import sys; sys.exit()", "width/2", "((height - 220) / 8) * 5 + 220")
     
     logging.info("Creating title")

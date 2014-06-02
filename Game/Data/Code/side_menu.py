@@ -1,6 +1,6 @@
 import pygame
-from button import Button
-from image import Image
+from Data.Code.button import Button
+from Data.Code.image import Image
 
 REDUCE_NUMBER_CODE = """if self.value > 0:
     self.plain_image = pygame.image.load(self.image_locations[0]).convert_alpha()
@@ -49,7 +49,6 @@ class side_menu(pygame.sprite.Sprite):
         # Go through each of the items and create a button for it
         for item in items:
             item = item.split(":")
-            print(item)
             if item[0] == "Black Hole":
                 self.buttons.append(Button(self.image, item[1] + " x", REDUCE_NUMBER_CODE, "width/2", str(pos_y), init_command="self.value=" + item[1], type="Create Black Hole",    image="Buttons\\Gameplay_Buttons\\black_hole_button.png", highlight_image="Buttons\\Gameplay_Buttons\\black_hole_button_highlighted.png", pressed_image="Buttons\\Gameplay_Buttons\\black_hole_button_pressed.png", text_align="left", press_method="mouse down"))
             elif item[0] == "Trigger Left":
@@ -61,14 +60,14 @@ class side_menu(pygame.sprite.Sprite):
         
         
         # Create the default menu buttons
-        Button(self.image, "Menu", "print('Menu')", "50", "height-30", image="Buttons\\small_button-white.png", highlight_image="Buttons\\small_button_highlighted-white.png", pressed_image="Buttons\\small_button_pressed-white.png", text_size=20, init_command="self.value=1", type="menu")
+        Button(self.image, "Menu", "", "50", "height-30", image="Buttons\\small_button-white.png", highlight_image="Buttons\\small_button_highlighted-white.png", pressed_image="Buttons\\small_button_pressed-white.png", text_size=20, init_command="self.value=1", type="menu")
         
-        Button(self.image, "Levels", "print('Options')", "width-50", "height-30", image="Buttons\\small_button-white.png", highlight_image="Buttons\\small_button_highlighted-white.png", pressed_image="Buttons\\small_button_pressed-white.png", text_size=20, init_command="self.value=1", type="level select")
+        Button(self.image, "Levels", "", "width-50", "height-30", image="Buttons\\small_button-white.png", highlight_image="Buttons\\small_button_highlighted-white.png", pressed_image="Buttons\\small_button_pressed-white.png", text_size=20, init_command="self.value=1", type="level select")
         
         # Game control buttons
-        Button(self.image, "Play", "print('Play')", "50", "height-100", image="Buttons\\small_button-white.png", highlight_image="Buttons\\small_button_highlighted-white.png", pressed_image="Buttons\\small_button_pressed-white.png", text_size=20, init_command="self.value=1", type="play game")
+        Button(self.image, "Play", "", "50", "height-100", image="Buttons\\small_button-white.png", highlight_image="Buttons\\small_button_highlighted-white.png", pressed_image="Buttons\\small_button_pressed-white.png", text_size=20, init_command="self.value=1", type="play game")
         
-        Button(self.image, "Restart", "print('Restart')", "width-50", "height-100", image="Buttons\\small_button-white.png", highlight_image="Buttons\\small_button_highlighted-white.png", pressed_image="Buttons\\small_button_pressed-white.png", text_size=20, init_command="self.value=1", type="restart game")
+        Button(self.image, "Restart", "", "width-50", "height-100", image="Buttons\\small_button-white.png", highlight_image="Buttons\\small_button_highlighted-white.png", pressed_image="Buttons\\small_button_pressed-white.png", text_size=20, init_command="self.value=1", type="restart game")
         
         
         # Create the menu break for asthetic reasons

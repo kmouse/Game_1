@@ -1,6 +1,6 @@
 import pygame
-from player import Player
-from effectors import Black_Hole, Finish, Trigger_Left, Trigger_Right, Death
+from Data.Code.player import Player
+from Data.Code.effectors import Black_Hole, Finish, Trigger_Left, Trigger_Right, Death
         
         
 class Game:
@@ -37,7 +37,6 @@ class Game:
         self.effectors_class = []
         for item in items:
             item = item.split(":")
-            print (item)
             if item[0] == "Player":
                 x, y, angle, velocity = item[1].split(",")
                 Player(int(x), int(y), float(angle), float(velocity))
@@ -74,7 +73,6 @@ class Game:
         self.image.fill((0, 0, 0))
         
         for command in commands:
-            print(command)
             if command == "play game":
                 self.simulate_game = True
             elif command == "Create Black Hole":
