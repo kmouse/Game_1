@@ -52,17 +52,10 @@ class Player(pygame.sprite.Sprite):
                     
                 #get the needed values
                 gravangle = get_angle((self.x, self.y), (point.x, point.y))
-                #gravstrength = point.mass/(4*math.pi*get_distance((self.x, self.y), (point.x, point.y)))
                 gravstrength = (1/(get_distance((self.x, self.y), (point.x, point.y))))*(point.mass)
-                color = gravstrength * 500
-                if color > 255:
-                    color = 255
-                #pygame.draw.line(screen, (255, 255, 255, color), (point.x, point.y), (self.x, self.y), 3)
+                
                 self.x += (math.sin(gravangle) * gravstrength)
                 self.y -= (math.cos(gravangle) * gravstrength)
-                color = int((255/1.0)*1*gravstrength)
-                #just debugging info doesn't work with the new algorithim
-                ##pygame.draw.line(screen, (color, color, 10), (self.x, self.y), (point.x, point.y), 1)
                         
             #apply the force from each of the  thrusters
             elif str(type(point)) == "<class 'Data.Code.effectors.Trigger_Left'>":

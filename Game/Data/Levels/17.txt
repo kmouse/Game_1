@@ -1,8 +1,21 @@
-Screen:1000,1000
-Text:Press play to start the level
+Screen:2000,2000
+Text:Maybe you're just looking through the files
+In which case: Congrats!
+Text:Or maybe you actually played through all the extra levels
+Text:For no reason
+Text:You probably didn't even expect this
+Text:But you've finished the game
+Text:And stubbornly played through the entire game
+Or just looked in the level files like a boss :D
+Text:And so I produce...
+Text:A tantalisingly incompletable level
+Text:Just for you
+Hey, I recommend just looking at this level in the game, it's pretty damn amusing :)
+Text:Good Luck!
 --
-Black Hole:1
 --
-Player:100,400,1,2
-Black Hole:300,500
-Finish:650,300,200,400
+Player:1000,1000,1,0
+Finish:0,0,2000,950
+Finish:1050,0,950,2000
+Finish:0,1050,2000,950
+Finish:0,0,950,2000

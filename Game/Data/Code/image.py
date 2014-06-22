@@ -6,7 +6,7 @@ class Image(pygame.sprite.Sprite):
     def __init__(self, screen, x, y, width=0, height=0, image="button.png"):
         # Initialise the sprite module
         pygame.sprite.Sprite.__init__(self, self.containers)
-        # Make the image a blank sprite
+        # Load the image
         self.image = pygame.image.load(get_image(image)).convert_alpha()
         
         # Set up the rect for drawing

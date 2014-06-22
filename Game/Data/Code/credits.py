@@ -3,7 +3,8 @@ from Data.Code.load import get_level, get_font
 from Data.Code.button import Button
 from Data.Code.mouse import Mouse
 
-PLAY_MUSIC = """"""
+PLAY_MUSIC = """import webbrowser
+webbrowser.open(self.web)"""
 
 def credits(screen):
     credits_location = get_level("credits.txt")
@@ -26,10 +27,15 @@ def credits(screen):
                 item[1] = item[1].split(",")
                 font = pygame.font.Font(get_font('arial.ttf'), int(item[1][6]))
                 static_items.append(font.render(item[1][0], 1, (int(item[1][1]), int(item[1][2]), int(item[1][3]))))
-                static_item_pos.append((item[1][4], item[1][5]))
+                if item[1][7] == "centre":
+                    offset = [static_items[-1].get_width() / 2, static_items[-1].get_height() / 2]
+                else:
+                    offset = [0,0]
+                static_item_pos.append((item[1][4] + "-" + str(offset[0]), item[1][5]  + "-" + str(offset[1])))
+                    
             elif item[0] == "Button":
                 item[1] = item[1].split(",")
-                Button(screen, "", PLAY_MUSIC, item[1][0], item[1][1], width=150, height=150, image=item[1][2], highlight_image=item[1][2], pressed_image=item[1][2], image_align="topleft")
+                Button(screen, "", PLAY_MUSIC, item[1][0], item[1][1], width=150, height=150, image=item[1][2], highlight_image=item[1][2], pressed_image=item[1][2], image_align="topleft", init_command="self.web=\"" + item[1][3].replace(";", ":") + "\"")
             
         
         # Initialise the mouse

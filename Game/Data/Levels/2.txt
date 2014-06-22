@@ -1,4 +1,6 @@
 Screen:1000,1000
+Text:You will find the thruster in the side menu.
+Text:Use it to push the planet in the desired direction.
 --
 Trigger Right:1
 --

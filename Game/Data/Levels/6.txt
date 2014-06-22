@@ -1,8 +1,5 @@
 Screen:1000,1000
-Text:Press play to start the level
+Credits
 --
-Black Hole:1
+
 --
-Player:100,400,1,2
-Black Hole:300,500
-Finish:650,300,200,400

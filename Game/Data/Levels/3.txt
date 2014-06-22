@@ -1,5 +1,4 @@
 Screen:600,600
-Text:Press play to start the level
 --
 Trigger Left:1
 --

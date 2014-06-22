@@ -3,6 +3,7 @@ from Data.Code.image import Image
 from Data.Code.mouse import Mouse
 from Data.Code.music import Music
 from Data.Code.load import get_image
+from Data.Code.cutscene import Cutscene
 import pygame
 import sys
 import ctypes
@@ -19,6 +20,7 @@ BLACK = (25, 25, 25)
 WHITE = (225, 225, 225)
 FPS = 60
 START_SIZE = (640, 480)
+MAX_SIZE = (400, 400)
 
 
 def run_menu():
@@ -34,7 +36,14 @@ def run_menu():
     logging.info("Screen size: " + str(SCREEN_SIZE))
     logging.info("Screen flags: pygame.FULLSCREEN")
     # Create screen with size START_SIZE and allow resizing, give it an icon
-    screen = pygame.display.set_mode(SCREEN_SIZE, pygame.FULLSCREEN)
+    old_screen = pygame.display.get_surface()
+    if old_screen:
+        old_size = old_screen.get_size()
+        screen = pygame.display.set_mode((max(old_size[0], MAX_SIZE[0]), max(old_size[1], MAX_SIZE[1])), old_screen.get_flags())
+        
+    # Create the screen
+    else:
+        screen = pygame.display.set_mode(SCREEN_SIZE, pygame.FULLSCREEN)
     pygame.display.set_icon(pygame.image.load(get_image("Static_Images\\icon.png")))
     
     # Hide the mouse
@@ -48,7 +57,7 @@ def run_menu():
     logging.info("Creating menu buttons")
     # Create the buttons
     start_button = Button(screen, "Start", "self.exit = True", "width/2", "((height - 220) / 8) * 1 + 220", init_command="self.exit = False")
-    options_button = Button(screen, "Help", "", "width/2", "((height - 220) / 8) * 3 + 220")
+    options_button = Button(screen, "Help", "", "width/2", "((height - 220) / 8) * 3 + 220", type="about")
     quit_button = Button(screen, "Quit", "import sys; sys.exit()", "width/2", "((height - 220) / 8) * 5 + 220")
     
     logging.info("Creating title")
@@ -95,7 +104,28 @@ def run_menu():
                     
    
         # Update and draw the static items
-        static_items.update(pygame.mouse.get_pos(), pygame.mouse.get_pressed(), screen)
+        for item in static_items:
+            pressed = item.update(pygame.mouse.get_pos(), pygame.mouse.get_pressed(), screen)
+            if pressed:
+                if item.type == "about":
+                    for item in ["help1", "help2", "help3", "help4"]:
+                        cut = Cutscene(screen, "../" + item + ".png")
+                        show_cutscene = True
+                        while show_cutscene:
+                            screen.fill((0, 0, 0))
+                            screen.blit(cut.image, (screen.get_width() / 2 - cut.image.get_width() / 2, screen.get_height() / 2 - cut.image.get_height() / 2))
+                            pygame.display.update()
+                            for event in pygame.event.get():
+                                if event.type == pygame.QUIT:
+                                    sys.exit()
+                                if event.type == pygame.KEYDOWN:
+                                    show_cutscene = False
+                                # If the window is resized then update all objects
+                                if event.type == pygame.VIDEORESIZE:
+                                    old_screen = pygame.display.get_surface()
+                                    screen = pygame.display.set_mode((max(event.size[0], 700), max(event.size[1], 500)), old_screen.get_flags())
+                                    side.update_pos(screen)
+                                    play_area.update_size(screen)
         static_items.draw(screen)
         
         # Draw mouse
@@ -103,9 +133,6 @@ def run_menu():
         
         # Draw frame
         pygame.display.update()
-        
-        # Cap fps
-        clock.tick(FPS)
         
         # Play music
         music.play_music()

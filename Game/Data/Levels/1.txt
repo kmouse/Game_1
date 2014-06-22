@@ -1,4 +1,9 @@
 Screen:1000,1000
+Text:Right click to pan level
+Text:Effectors are found in the side menu on the right
+Text:Click and drag the effectors into the game
+Text:The black hole pulls the planet towards it
+Text:Use these to steer the planet into the green "safe zone"
 Text:Press play to start the level
 Cutscene:1-intro_planet.png
 --

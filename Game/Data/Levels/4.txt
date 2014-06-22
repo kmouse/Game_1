@@ -1,9 +1,8 @@
 Screen:1000,1000
-Text:Press play to start the level
 --
 Black Hole:2
 Trigger Right:1
 --
 Player:100,500,1,2
-Death:200,400, 200, 200
+Death:250,400, 200, 200
 Finish:650,300,200,400

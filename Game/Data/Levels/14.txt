@@ -1,5 +1,4 @@
 Screen:1000,1000
-Text:Press play to start the level
 --
 Black Hole:1
 --

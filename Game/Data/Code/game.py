@@ -1,7 +1,7 @@
 from Data.Code.side_menu import side_menu
 from Data.Code.mouse import Mouse
 from Data.Code.current_game import Game
-from Data.Code.load import get_level, get_file, get_music
+from Data.Code.load import get_level, get_file, get_music, get_font
 from Data.Code.level_select import Level_Select
 from Data.Code.music_controls import Music_Controls
 from Data.Code.cutscene import Cutscene
@@ -16,6 +16,7 @@ user32 = ctypes.windll.user32
 SCREEN_SIZE = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
         
 START_SIZE = (700, 500)
+MAX_SIZE = (700, 500)
         
 def control_game():
     pygame.init()
@@ -24,7 +25,8 @@ def control_game():
     # This is used to prevent an error with the surface mismatching to the screen
     old_screen = pygame.display.get_surface()
     if old_screen:
-        screen = old_screen
+        old_size = old_screen.get_size()
+        screen = pygame.display.set_mode((max(old_size[0], MAX_SIZE[0]), max(old_size[1], MAX_SIZE[1])), old_screen.get_flags())
         
     # Create the screen
     else:
@@ -65,10 +67,13 @@ def level_select(screen):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    return 0, True
             if event.type == pygame.VIDEORESIZE:
                 # maintain the flags of the surface
                 old_screen = pygame.display.get_surface()
-                screen = pygame.display.set_mode((max(event.size[0], START_SIZE[0]), max(event.size[1], START_SIZE[1])), old_screen.get_flags())
+                screen = pygame.display.set_mode((max(event.size[0], MAX_SIZE[0]), max(event.size[1], MAX_SIZE[1])), old_screen.get_flags())
                 with open(get_file("Levels/levels_info.txt")) as f:
                     num_levels = int(f.readline())
                     unlocked_levels = int(f.readline())
@@ -79,7 +84,7 @@ def level_select(screen):
                     # get the flags of the surface
                     old_screen = pygame.display.get_surface()
                     
-                    screen = pygame.display.set_mode((START_SIZE[0], START_SIZE[1]) if old_screen.get_flags() == pygame.FULLSCREEN else SCREEN_SIZE, 
+                    screen = pygame.display.set_mode((MAX_SIZE[0], MAX_SIZE[1]) if old_screen.get_flags() == pygame.FULLSCREEN else SCREEN_SIZE, 
                     pygame.RESIZABLE if old_screen.get_flags() == pygame.FULLSCREEN else pygame.FULLSCREEN)
                 
         pressed = selector.update(pygame.mouse.get_pos(), pygame.mouse.get_pressed())
@@ -98,7 +103,6 @@ def level_select(screen):
     
 def run_game(screen, level):
 
-    credits(screen)
     level_file = get_level(str(level) + ".txt")
     
     with open(level_file) as l:
@@ -115,11 +119,18 @@ def run_game(screen, level):
     # Initialise the side menu
     side = side_menu(screen, player_items.split("\n"))
     
+    text = [" "]
+    # How long each text lasts for
+    text_time = 300
+    text_timer = 0
+    
     # Initialise game
     for item in level_items:
         item = item.split(":")
         if item[0] == "Screen":
             game_size = item[1].split(",")
+        if item[0] == "Text":
+            text.append(item[1])
         if item[0] == "Cutscene":
             cut = Cutscene(screen, item[1])
             show_cutscene = True
@@ -138,6 +149,18 @@ def run_game(screen, level):
                         screen = pygame.display.set_mode((max(event.size[0], 700), max(event.size[1], 500)), old_screen.get_flags())
                         side.update_pos(screen)
                         play_area.update_size(screen)
+        if item[0] == "Credits":
+            credits(screen)
+            font = pygame.font.Font(get_font('arial.ttf'), int(min((screen.get_width() / 700) * 20, 32)))
+            text_render = font.render(" ", 1, (255, 255,255))
+            with open(get_file("Levels/levels_info.txt")) as f:
+                num_levels = f.readline()
+                unlocked_levels = int(f.readline())
+                
+            with open(get_file("Levels/levels_info.txt"), "w") as f:
+                max_level = max(unlocked_levels, level + 1)
+                f.write(num_levels + str(max_level))
+            return False
     
     play_area = Game(screen, (int(game_size[0]), int(game_size[1])), game_items.split("\n"))
     
@@ -169,21 +192,35 @@ def run_game(screen, level):
                 screen = pygame.display.set_mode((max(event.size[0], 700), max(event.size[1], 500)), old_screen.get_flags())
                 side.update_pos(screen)
                 play_area.update_size(screen)
+                font = pygame.font.Font(get_font('arial.ttf'), int(min((screen.get_width() / 700) * 20, 32)))
+                text_render = font.render(text[0], 1, (255, 255,255))
+                offset = [text_render.get_width() / 2, text_render.get_height() / 2]
+                text_position = ((screen.get_width() / 2 - offset[0], screen.get_height() / 2 - offset[1]))
+                
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_F11:
                     # get the flags of the surface
                     old_screen = pygame.display.get_surface()
                     
-                    screen = pygame.display.set_mode((START_SIZE[0], START_SIZE[1]) if old_screen.get_flags() == pygame.FULLSCREEN else SCREEN_SIZE, 
+                    screen = pygame.display.set_mode((MAX_SIZE[0], MAX_SIZE[1]) if old_screen.get_flags() == pygame.FULLSCREEN else SCREEN_SIZE, 
                     pygame.RESIZABLE if old_screen.get_flags() == pygame.FULLSCREEN else pygame.FULLSCREEN)
+                    
+                    font = pygame.font.Font(get_font('arial.ttf'), int(min((screen.get_width() / 700) * 20, 32)))
+                    text_render = font.render(text[0], 1, (255, 255,255))
+                    offset = [text_render.get_width() / 2, text_render.get_height() / 2]
+                    text_position = ((screen.get_width() / 2 - offset[0], screen.get_height() / 2 - offset[1]))
                 
                 
         # Update the side menu
         side.update(screen, play_area.pieces)
         play_area.pieces = []
         if "menu" in side.commands:
+            font = pygame.font.Font(get_font('arial.ttf'), int(min((screen.get_width() / 700) * 20, 32)))
+            text_render = font.render(" ", 1, (255, 255,255))
             return True
         if "level select" in side.commands:
+            font = pygame.font.Font(get_font('arial.ttf'), int(min((screen.get_width() / 700) * 20, 32)))
+            text_render = font.render(" ", 1, (255, 255,255))
             return False
         if "restart game" in side.commands:
             level_file = get_level(str(level) + ".txt")
@@ -224,14 +261,32 @@ def run_game(screen, level):
         screen.fill((10, 20, 20), screen_fill)
         # Draw the game
         screen.blit(play_area.image, (0, 0), area=play_area.draw_area)
+        
         # Draw the music controls
         music_group.draw(screen)
+        
+        # Draw text
+        if text_timer == 0:
+            text.pop(0)
+            if len(text) == 0:
+                text.append(" ")
+            font = pygame.font.Font(get_font('arial.ttf'), int(min((screen.get_width() / 700) * 20, 32)))
+            text_render = font.render(text[0], 1, (255, 255,255))
+            offset = [text_render.get_width() / 2, text_render.get_height() / 2]
+            text_position = ((screen.get_width() / 2 - offset[0], screen.get_height() / 2 - offset[1]))
+            text_timer = text_time
+                
+        screen.blit(text_render, text_position)
+        text_timer -= 1
+        
         # Draw mouse
         if pygame.mouse.get_focused():
             x, y = pygame.mouse.get_pos()
             screen.blit(mouse.image, (x - 5, y - 5))
+            
         # Draw screen
         pygame.display.update()
+        
         # Cap framerate
         clock.tick(60)
         
@@ -247,5 +302,7 @@ def run_game(screen, level):
                 with open(get_file("Levels/levels_info.txt"), "w") as f:
                     max_level = max(unlocked_levels, level + 1)
                     f.write(num_levels + str(max_level))
-                
+            
+            font = pygame.font.Font(get_font('arial.ttf'), int(min((screen.get_width() / 700) * 20, 32)))
+            text_render = font.render(" ", 1, (255, 255,255))
             return False
